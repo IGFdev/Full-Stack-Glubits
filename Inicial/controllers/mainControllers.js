@@ -1,42 +1,24 @@
+const db = require('../database/models');
+const bcrypt = require('bcryptjs');
+const { captureRejectionSymbol } = require('events');
+
 const controller = {
     getIndex: (req, res) => {
         res.redirect('/users')
     },
 
     getUsers: (req, res) => {
-        const users = [
-            {
-                id: '040533a5-305e-4ed5-ad88-97d716fc3161',
-                email: 'ignacio@gmail.com',
-                username: 'Nacho',
-                password: '$2b$12$lBT3YJDNeDc8HgKFgmJhEeCkFSQ5hx3coiIPmLs0ih0U4zmh0WgDu'
-            },
-            {
-                id: '2a9f1f92-f577-4c7a-bccc-292c44e179c4',
-                email: 'rocio@gmail.com',
-                username: 'Rocksy',
-                password: '$2b$12$lBT3YJDNeDc8HgKFgmJhEeCkFSQ5hx3coiIPmLs0ih0U4zmh0WgDu'
-            },
-            {
-                id: '45a3320d-e86d-4554-8340-c152d0f6ed17',
-                email: 'pedro@gmail.com',
-                username: 'Pedrito',
-                password: '$2b$12$lBT3YJDNeDc8HgKFgmJhEeCkFSQ5hx3coiIPmLs0ih0U4zmh0WgDu'
-            },
-        ];
-
-        res.render('users', { users });
+        db.User.findAll({
+            raw: true
+        })
+            .then(users => res.render('users', { users }))
     },
 
     getSingleUser: (req, res) => {
-        const user = {
-            id: '040533a5-305e-4ed5-ad88-97d716fc3161',
-            email: 'ignacio@gmail.com',
-            username: 'Nacho',
-            password: '$2b$12$lBT3YJDNeDc8HgKFgmJhEeCkFSQ5hx3coiIPmLs0ih0U4zmh0WgDu'
-        }
+        const userId = req.params.id;
 
-        res.render('userDetail', { user });
+        db.User.findByPk(userId)
+            .then(user => res.render('userDetail', { user }));
     },
 
     getCreateUser: (req, res) => {
@@ -44,30 +26,57 @@ const controller = {
     },
 
     postUser: (req, res) => {
-        // se agrega el usuario y se redirecciona
-        res.redirect('/users')
-    },
-    
-    deleteUser: (req, res) => {
-        // se elimina el usuario y se redirecciona
-        res.redirect('/users')
-    },
-    
+        const hashedPassword = bcrypt.hashSync(req.body.password, 12);
 
-    getEditUser: (req, res) => {
         const user = {
-            id: '040533a5-305e-4ed5-ad88-97d716fc3161',
-            email: 'ignacio@gmail.com',
-            username: 'Nacho',
-            password: '$2b$12$lBT3YJDNeDc8HgKFgmJhEeCkFSQ5hx3coiIPmLs0ih0U4zmh0WgDu'
+            email: req.body.email,
+            password: hashedPassword,
+            username: req.body.username,
         }
 
-        res.render('editUser', { user });
+        db.User.create(user)
+            .then(newUser => res.redirect(`/users/${newUser.dataValues.id}/detail`));
     },
-    
+
+    deleteUser: (req, res) => {
+        db.User.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+            .then(user => res.redirect('/users'))
+            .catch(error => console.log(error));
+    },
+
+
+    getEditUser: async (req, res) => {
+        const id = req.params.id;
+        /* db.User.findByPk(id)
+            .then(user => {
+                res.render('editUser', { user });
+            })
+            .catch(error => console.log(error)); */
+
+        try {
+            const user = await db.User.findByPk(id);
+            await res.render('editUser', { user });
+        } catch (error) {
+            console.log(error)
+        }
+    },
+
     editUser: (req, res) => {
-        // se edita el usuario y se redirecciona
-        res.redirect('/users')
+        const user = {
+            username: req.body.username,
+            email: req.body.email
+        }
+
+        db.User.update(user, {
+            where: {
+                id: req.params.id
+            }
+        })
+            .then(user => res.redirect(`/users/${req.params.id}/detail`));
     },
 }
 
