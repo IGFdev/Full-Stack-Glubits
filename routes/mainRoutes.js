@@ -12,4 +12,6 @@ router.get('/users/:id/edit', mainControllers.getEditUser) // muestra form de ed
 router.put('/users/:id/edit', mainControllers.editUser) // muestra form de edición de usuario
 router.delete('/users/:id/delete', mainControllers.deleteUser) // muestra form de edición de usuario
 
+router.get('/home', (req, res) => res.render('home'))
+
 module.exports = router;
