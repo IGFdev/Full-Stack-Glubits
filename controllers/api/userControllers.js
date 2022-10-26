@@ -35,7 +35,7 @@ const controllers = {
                 id
             }
         })
-            .then(rows => res.json({message: rows[0] + ' usuario(s) actualizado(s)'}))
+            .then(rows => res.json({ message: rows[0] + ' usuario(s) actualizado(s)' }))
     }
 }
 

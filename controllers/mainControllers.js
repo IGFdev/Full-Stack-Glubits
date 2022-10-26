@@ -1,17 +1,28 @@
 const db = require('../database/models');
 const bcrypt = require('bcryptjs');
-const { captureRejectionSymbol } = require('events');
+const fetch = require('node-fetch');
 
 const controller = {
     getIndex: (req, res) => {
         res.redirect('/users')
     },
 
-    getUsers: (req, res) => {
-        db.User.findAll({
-            raw: true
-        })
-            .then(users => res.render('users', { users }))
+    getUsers: async (req, res) => {
+        /* fetch('http://localhost:3000/api/users')
+            .then(usersJson => usersJson.json())
+            .then(users => {
+                console.log(users)
+                res.render('users', { users });
+            })  */
+
+        try {
+            const usersJson = await fetch('http://localhost:3000/api/users');
+            const users = await usersJson.json();
+
+            res.render('users', { users });
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     getSingleUser: (req, res) => {
@@ -78,6 +89,10 @@ const controller = {
         })
             .then(user => res.redirect(`/users/${req.params.id}/detail`));
     },
+
+    postUser2: (req, res) => {
+        
+    }
 }
 
 module.exports = controller;
