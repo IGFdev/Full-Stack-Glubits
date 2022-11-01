@@ -1,66 +1,49 @@
-/* console.log(document.querySelector('h1'));
-console.log(document.querySelector('.test'));
-console.log(document.querySelector('#test2')); */
+const boton = document.getElementById('mostrar-btn');
 
-/* console.log(document.querySelectorAll('h1'));
-console.log(document.querySelectorAll('.test3'));
-console.log(document.querySelectorAll('#test2')); */
+boton.addEventListener('click', () => {
+    const secretoH1 = document.getElementById('secreto');
 
-/* console.log(document.getElementById('test'))
-console.log(document.getElementsByClassName('.test3')) */
+    secretoH1.classList.toggle('oculto');
 
-/* const title = document.getElementById('title');
-const body = document.querySelector('body');
+    if (secretoH1.classList.contains('oculto')) {
+        boton.innerText = 'Mostrar secreto';
+    } else {
+        boton.innerText = 'Ocultar secreto';
+    }
 
-//body.style.backgroundColor = 'teal';
-
-const hayError = false;
-
-if (hayError){
-    title.style.color = 'red';
-} else {
-    title.style.color = 'green';
-} */
-
-//const parrafo = document.querySelector('#parrafo')
-const parrafo = document.getElementById('parrafo');
-
-parrafo.innerHTML = 'Hola estoy modificando el elemento desde js';
-
-const lista = document.getElementById('lista');
-
-const paises = ['arg', 'peru', 'ngr'];
-
-paises.forEach(paisActual => {
-    lista.innerHTML += `<li class="rojo">${paisActual}</li>`
+    //boton.innerText = secretoH1.classList.contains('oculto') ? 'Mostrar secreto' : 'Ocultar secreto';
 });
 
-const password = document.getElementById('password');
+boton.addEventListener('mouseenter', (e) => {
+    e.target.style.backgroundColor = 'red';
+});
 
-console.log(password.value);
+boton.addEventListener('mouseout', (e) => {
+    e.target.style.backgroundColor = 'whitesmoke';
+});
 
-if (password.value.length < 8){
-    //alert('La contraseña es muy corta')
-}
 
-const paisesLi = Array.from(document.querySelectorAll('li'));
+document.addEventListener('DOMContentLoaded', () => {
+    alert('sitio cargado correctamente');
+});
 
-paisesLi.forEach(paisActual => {
-    if(paisActual.innerHTML === 'arg'){
-        paisActual.classList.toggle('verde')
-    } else if (paisActual.innerHTML === 'ngr'){
-        paisActual.classList.add('rojo');
+document.addEventListener('keydown', (e) => {
+    console.log(e.key)
+
+    if (e.key === 'a') {
+        const secretoH1 = document.getElementById('secreto');
+
+        secretoH1.classList.toggle('oculto');
+
+        if (secretoH1.classList.contains('oculto')) {
+            boton.innerText = 'Mostrar secreto';
+        } else {
+            boton.innerText = 'Ocultar secreto';
+        }
     }
 });
 
-/* const nombre = prompt('cuál es tu nombre?');
-
-const title = document.getElementById('title');
-
-title.innerHTML = 'Bienvenido ' + nombre;
-
-console.log(confirm('Estás seguro de tu acción?')); */
-
-//console.log(prompt('Cuántos años tenés?'));
-
-console.log(confirm('Advertencia! Estás seguro de que quieres ingresar a este sitio?'));
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    console.log('hola')
+})
