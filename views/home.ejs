@@ -17,10 +17,23 @@
 
 </head>
 <body>
-    <h1 class="oculto" id="secreto">Un secreto muy importante</h1>
-
-    <button id="mostrar-btn">Mostrar secreto</button>
+    <form id="login-form">
+        <label for="nombre">nombre</label>
+        <input type="text" name="nombre" id="nombre">
+        <p style="color: red; margin: 0;" id="nombreError"></p>
+        <br>
+        <label for="password">contraseña</label>
+        <input type="password" name="password" id="password">
+        <br>
+        <label for="email">email</label>
+        <input type="email" name="email" id="email">
+        <br>
+        <input type="submit" value="Enviar">
+    </form>
     
+    <h1 id="nombreH1"></h1>
+    <h2 id="passwordH2"></h2>
+    <h3 id="emailH3"></h3>
 
     <script src="js/app.js" type="text/javascript"></script>
 </body>
